@@ -1,0 +1,19 @@
+# Binaries
+*.exe
+*.out
+
+# Object files
+*.o
+*.obj
+
+# Build folders
+build/
+
+# IDE folders
+.vscode/
+
+# Logs
+*.log
+
+# Mac & Linux hidden files
+.DS_Store
