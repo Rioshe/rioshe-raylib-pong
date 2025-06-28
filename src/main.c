@@ -7,10 +7,9 @@ const int screenHeight = 450;
 
 int main(void)
 {
-    InitWindow(GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT, GAME_TITLE);
-
-    SetTargetFPS(MAIN_TARGET_FPS);
-
+    InitWindow(CORE_SCREEN_WIDTH, CORE_SCREEN_HEIGHT, CORE_WINDOW_TITLE);
+    SetTargetFPS(CORE_TARGET_FPS);
+    InitAudioDevice();
     Game_Init();
 
     while (!WindowShouldClose())

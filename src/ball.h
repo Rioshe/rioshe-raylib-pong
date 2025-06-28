@@ -8,7 +8,7 @@ typedef struct BallData
     Rectangle srcRect;
     Rectangle dstRect;
     Vector2 direction;
-    Vector2 velocity;
+    Vector2 speed;
     Vector2 origin;
     float radius;
 } Ball;

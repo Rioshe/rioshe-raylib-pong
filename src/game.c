@@ -3,8 +3,11 @@
 #include "paddles.h"
 #include "collision.h"
 #include "score.h"
+#include "config.h"
+#include "sound.h"
 
 static GameState _GameState = GAMESTATE_NONE;
+bool g_debugMode = false;
 
 void Game_Init(){
     _Game_SetGameState(GAMESTATE_INITIALISE);
@@ -12,6 +15,11 @@ void Game_Init(){
 
 void Game_Update()
 {
+    if (IsKeyPressed(KEY_F1)) {
+        g_debugMode = !g_debugMode;
+    }
+
+
     switch (_GameState)
     {
         case GAMESTATE_INITIALISE:
@@ -42,12 +50,19 @@ void _Game_SetGameState(GameState newState){
 }
 
 void _Game_Initialise(){
+    Sound_Init();
+    Score_Init();
     Ball_Init();
     Paddles_Init();
     _Game_SetGameState(GAMESTATE_WAITING_FOR_INPUT);
 }
 
 void _Game_WaitingForInput(){
+
+    const char* startMessage = "PRESS SPACE TO START";
+    int fontSize = 20;
+    int textWidth = MeasureText(startMessage, fontSize);
+    DrawText(startMessage, (CORE_SCREEN_WIDTH - textWidth)/2, CORE_SCREEN_HEIGHT / 2 - 100, 20, YELLOW);
     if(IsKeyPressed(KEY_SPACE)){
         _Game_SetGameState(GAMESTATE_IN_PROGRESS);
     }
@@ -64,13 +79,48 @@ void _Game_InProgress()
     }
 }
 
-void _Game_PointScored(){
-    Game_Reset();
-    _Game_SetGameState(GAMESTATE_WAITING_FOR_INPUT);
+void _Game_PointScored()
+{
+    printf("%d %d", Score_GetPlayerOne(), Score_GetPlayerTwo());
+    if(Score_DidAnyoneWin())
+    {
+        _Game_SetGameState(GAMESTATE_GAME_OVER);
+    }
+    else
+    {
+        Sound_PlayScored();
+        Game_Reset();
+        _Game_SetGameState(GAMESTATE_WAITING_FOR_INPUT);
+    }
+
 }
 
 void _Game_GameOver(){
 
+    char* winScreenMessage;
+    if (Score_DidPlayerOneWin())
+    {
+        winScreenMessage = "PLAYER ONE WINS!";
+    }
+
+    if (Score_DidPlayerTwoWin())
+    {
+        winScreenMessage = "PLAYER TWO WINS!";
+    }
+
+    int fontSize = 30;
+    int textWidth = MeasureText(winScreenMessage, fontSize);
+    DrawText(winScreenMessage, (CORE_SCREEN_WIDTH - textWidth)/2, CORE_SCREEN_HEIGHT / 2, fontSize, YELLOW);
+
+    const char* subMessage = "PRESS R TO RESTART";
+    fontSize = 20;
+    textWidth = MeasureText(subMessage, fontSize);
+    DrawText(subMessage, (CORE_SCREEN_WIDTH - textWidth)/2, CORE_SCREEN_HEIGHT / 2 - 100, fontSize, YELLOW);
+
+    if(IsKeyPressed(KEY_R))
+    {
+        _Game_SetGameState(GAMESTATE_INITIALISE);
+    }
 }
 
 void Game_Draw(){
@@ -86,4 +136,5 @@ void Game_Reset(){
 void Game_Shutdown(){
     Ball_Destroy();
     Paddles_Destroy();
+    Sound_Cleanup();
 }

@@ -3,6 +3,7 @@
 #include "paddles.h"
 #include "config.h"
 #include "score.h"
+#include "sound.h"
 
 void Collision_Update(){
     Ball* ball = Ball_Get();
@@ -16,6 +17,7 @@ void Collision_Update(){
     
     if (isCollidingWithLeftPaddle || isCollidingWithRightPaddle)
     {
+        Sound_PlayHit();
         Ball_SwitchDirectionX();  // flip X
     }
 }
@@ -26,7 +28,7 @@ bool Collision_CheckOutOfBounds()
     Ball* ball = Ball_Get();
     Vector2 ballPosition = (Vector2){ball->dstRect.x, ball->dstRect.y};
 
-    if(ballPosition.x > GAME_SCREEN_WIDTH){
+    if(ballPosition.x > CORE_SCREEN_WIDTH){
         Score_IncrementPlayerOne();
         isOutOfBounds = true;
     }

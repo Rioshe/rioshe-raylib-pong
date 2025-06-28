@@ -18,11 +18,11 @@ void _Paddles_Init(){
     Rectangle sourceRect = {0, 0, PADDLE_WIDTH, PADDLE_HEIGHT};
     Vector2 origin = {PADDLE_WIDTH/2, PADDLE_HEIGHT/2};
 
-    float paddlePositionY = GAME_SCREEN_HEIGHT/2 - PADDLE_HEIGHT/2;
+    float paddlePositionY = CORE_SCREEN_HEIGHT/2 - PADDLE_HEIGHT/2;
     Rectangle dstRectLeft = {50 - PADDLE_WIDTH, paddlePositionY, PADDLE_WIDTH, PADDLE_HEIGHT};
     _Paddle_Init(&s_paddleLeft, sourceRect, dstRectLeft, origin, KEY_W, KEY_S);
 
-    Rectangle dstRectRight = {GAME_SCREEN_WIDTH - 50, paddlePositionY, PADDLE_WIDTH, PADDLE_HEIGHT};
+    Rectangle dstRectRight = {CORE_SCREEN_WIDTH - 50, paddlePositionY, PADDLE_WIDTH, PADDLE_HEIGHT};
     _Paddle_Init(&s_paddleRight, sourceRect, dstRectRight, origin, KEY_UP, KEY_DOWN);
 }
 
@@ -57,7 +57,7 @@ void _Paddle_Update(Paddle* paddle){
     if (IsKeyDown(paddle->downKey))
     {
         float yPosition = paddle->dstRect.y + (paddle->speed * dt);
-        yPosition = yPosition > GAME_SCREEN_HEIGHT - paddle->dstRect.height? GAME_SCREEN_HEIGHT - paddle->dstRect.height: yPosition;
+        yPosition = yPosition > CORE_SCREEN_HEIGHT - paddle->dstRect.height? CORE_SCREEN_HEIGHT - paddle->dstRect.height: yPosition;
         paddle->dstRect.y = yPosition;
     }
 }
@@ -66,8 +66,12 @@ void Paddles_Draw(){
     _Paddle_Draw(s_textureLeftPaddle, &s_paddleLeft);
     _Paddle_Draw(s_textureRightPaddle, &s_paddleRight);
 
-    DrawRectangleLinesEx(s_paddleLeft.dstRect, 2, GREEN);
-    DrawRectangleLinesEx(s_paddleRight.dstRect, 2, GREEN);
+    if(g_debugMode)
+    {
+        DrawRectangleLinesEx(s_paddleLeft.dstRect, 2, GREEN);
+        DrawRectangleLinesEx(s_paddleRight.dstRect, 2, GREEN);
+
+    }
 }
 
 void _Paddle_Draw(Texture2D texture, Paddle* paddle){
