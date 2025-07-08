@@ -13,7 +13,7 @@ typedef enum PLAYER{
     ONE,
     TWO,
     AI
-};
+} PLAYER;
 
 void Game_Init(void);
 void Game_Update(void);

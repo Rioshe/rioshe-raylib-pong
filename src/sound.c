@@ -9,7 +9,7 @@
 static Sound s_hitSounds[HIT_SOUND_COUNT];
 static Sound s_scoredSounds[SCORED_SOUND_COUNT];
 
-void Sound_Init() {
+void Sound_Init(void) {
 
     const char* hitSoundFormat = HIT_SOUNDS_PATH "hit%d.wav";
     for (size_t i = 0; i < HIT_SOUND_COUNT; i++)
@@ -26,17 +26,17 @@ void Sound_Init() {
     }
 }
 
-void Sound_PlayHit() {
+void Sound_PlayHit(void) {
     int index = rand() % HIT_SOUND_COUNT;
     PlaySound(s_hitSounds[index]);
 }
 
-void Sound_PlayScored() {
+void Sound_PlayScored(void) {
     int index = rand() % SCORED_SOUND_COUNT;
     PlaySound(s_scoredSounds[index]);
 }
 
-void Sound_Cleanup() {
+void Sound_Cleanup(void) {
     for (int i = 0; i < HIT_SOUND_COUNT; i++) UnloadSound(s_hitSounds[i]);
     for (int i = 0; i < SCORED_SOUND_COUNT; i++) UnloadSound(s_scoredSounds[i]);
 }

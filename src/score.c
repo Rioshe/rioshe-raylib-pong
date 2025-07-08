@@ -2,43 +2,46 @@
 #include "raylib.h"
 #include "config.h"
 
-void Score_IncrementPlayerOne()
+static int s_playerOneScore = 0;
+static int s_playerTwoScore = 0;
+
+void Score_IncrementPlayerOne(void)
 {
     s_playerOneScore+=1;
 }
 
-void Score_IncrementPlayerTwo()
+void Score_IncrementPlayerTwo(void)
 {
     s_playerTwoScore+=1;
 }
 
-int Score_GetPlayerOne(){
+int Score_GetPlayerOne(void){
     return s_playerOneScore;
 }
 
-int Score_GetPlayerTwo(){
+int Score_GetPlayerTwo(void){
     return s_playerTwoScore;
 }
 
-void Score_Init(){
+void Score_Init(void){
     s_playerOneScore = 0;
     s_playerTwoScore = 0;
 }
 
-bool Score_DidAnyoneWin()
+bool Score_DidAnyoneWin(void)
 {
     return Score_DidPlayerOneWin() || Score_DidPlayerTwoWin();
 }
 
-bool Score_DidPlayerOneWin(){
+bool Score_DidPlayerOneWin(void){
     return s_playerOneScore >= GAME_SCORE_TO_WIN;
 }
 
-bool Score_DidPlayerTwoWin(){
+bool Score_DidPlayerTwoWin(void){
     return s_playerTwoScore >= GAME_SCORE_TO_WIN;
 }
 
-void Score_Draw()
+void Score_Draw(void)
 {
     DrawText(TextFormat("%d", s_playerOneScore), 10, 10, 20, WHITE);
 

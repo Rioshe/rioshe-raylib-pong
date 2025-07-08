@@ -2,17 +2,14 @@
 #define SCORE_H
 #include "stdbool.h"
 
-static int s_playerOneScore = 0;
-static int s_playerTwoScore = 0;
-
 void Score_IncrementPlayerOne(void);
 void Score_IncrementPlayerTwo(void);
-int Score_GetPlayerOne();
-int Score_GetPlayerTwo();
-void Score_Init();
+int Score_GetPlayerOne(void);
+int Score_GetPlayerTwo(void);
+void Score_Init(void);
 void Score_Draw(void);
-bool Score_DidAnyoneWin();
-bool Score_DidPlayerOneWin();
-bool Score_DidPlayerTwoWin();
+bool Score_DidAnyoneWin(void);
+bool Score_DidPlayerOneWin(void);
+bool Score_DidPlayerTwoWin(void);
 
 #endif

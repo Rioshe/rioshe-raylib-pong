@@ -5,7 +5,7 @@
 #include "score.h"
 #include "sound.h"
 
-void Collision_Update(){
+void Collision_Update(void){
     Ball* ball = Ball_Get();
     Rectangle* paddleLeftRect = Paddles_GetLeftRectangle();
     Rectangle* paddleRightRect = Paddles_GetRightRectangle();
@@ -22,7 +22,7 @@ void Collision_Update(){
     }
 }
 
-bool Collision_CheckOutOfBounds()
+bool Collision_CheckOutOfBounds(void)
 {    
     bool isOutOfBounds = false;
     Ball* ball = Ball_Get();

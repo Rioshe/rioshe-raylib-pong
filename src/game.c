@@ -9,8 +9,16 @@
 static GameState _GameState = GAMESTATE_NONE;
 bool g_debugMode = false;
 
-void Game_Init(){
-    _Game_SetGameState(GAMESTATE_INITIALISE);
+void Game_SetGameState(GameState newState);
+void Game_Initialise(void);
+void Game_WaitingForInput(void);
+void Game_InProgress(void);
+void Game_PointScored(void);
+void Game_GameOver(void);
+
+
+void Game_Init(void){
+    Game_SetGameState(GAMESTATE_INITIALISE);
 }
 
 void Game_Update()
@@ -23,18 +31,18 @@ void Game_Update()
     switch (_GameState)
     {
         case GAMESTATE_INITIALISE:
-            _Game_Initialise();
+            Game_Initialise();
             break;
         case GAMESTATE_WAITING_FOR_INPUT:
-            _Game_WaitingForInput();
+            Game_WaitingForInput();
             break;
         case GAMESTATE_IN_PROGRESS:
-            _Game_InProgress();
+            Game_InProgress();
             break;
         case GAMESTATE_POINT_SCORED:
-            _Game_PointScored();
+            Game_PointScored();
         case GAMESTATE_GAME_OVER:
-            _Game_GameOver();
+            Game_GameOver();
             break;
         default:
             break;
@@ -43,59 +51,58 @@ void Game_Update()
     Score_Draw();
 }
 
-void _Game_SetGameState(GameState newState){
+void Game_SetGameState(GameState newState){
     if(_GameState != newState){
         _GameState = newState;
     }
 }
 
-void _Game_Initialise(){
+void Game_Initialise(void){
     Sound_Init();
     Score_Init();
     Ball_Init();
     Paddles_Init();
-    _Game_SetGameState(GAMESTATE_WAITING_FOR_INPUT);
+    Game_SetGameState(GAMESTATE_WAITING_FOR_INPUT);
 }
 
-void _Game_WaitingForInput(){
+void Game_WaitingForInput(void){
 
     const char* startMessage = "PRESS SPACE TO START";
     int fontSize = 20;
     int textWidth = MeasureText(startMessage, fontSize);
     DrawText(startMessage, (CORE_SCREEN_WIDTH - textWidth)/2, CORE_SCREEN_HEIGHT / 2 - 100, 20, YELLOW);
     if(IsKeyPressed(KEY_SPACE)){
-        _Game_SetGameState(GAMESTATE_IN_PROGRESS);
+        Game_SetGameState(GAMESTATE_IN_PROGRESS);
     }
 }
 
-void _Game_InProgress()
+void Game_InProgress(void)
 {
     Collision_Update();
     Ball_Update();
     Paddles_Update();
 
     if(Collision_CheckOutOfBounds()){
-        _Game_SetGameState(GAMESTATE_POINT_SCORED);
+        Game_SetGameState(GAMESTATE_POINT_SCORED);
     }
 }
 
-void _Game_PointScored()
+void Game_PointScored(void)
 {
-    printf("%d %d", Score_GetPlayerOne(), Score_GetPlayerTwo());
     if(Score_DidAnyoneWin())
     {
-        _Game_SetGameState(GAMESTATE_GAME_OVER);
+        Game_SetGameState(GAMESTATE_GAME_OVER);
     }
     else
     {
         Sound_PlayScored();
         Game_Reset();
-        _Game_SetGameState(GAMESTATE_WAITING_FOR_INPUT);
+        Game_SetGameState(GAMESTATE_WAITING_FOR_INPUT);
     }
 
 }
 
-void _Game_GameOver(){
+void Game_GameOver(){
 
     char* winScreenMessage;
     if (Score_DidPlayerOneWin())
@@ -119,7 +126,7 @@ void _Game_GameOver(){
 
     if(IsKeyPressed(KEY_R))
     {
-        _Game_SetGameState(GAMESTATE_INITIALISE);
+        Game_SetGameState(GAMESTATE_INITIALISE);
     }
 }
 

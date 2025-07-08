@@ -6,12 +6,16 @@
 static Ball s_ball;
 static Texture2D s_textureBall;
 
-void Ball_Init(){
+void Ball_Setup(void);
+void Ball_SwitchDirectionY(void);
+
+
+void Ball_Init(void){
     s_textureBall = LoadTexture(TEXTURE_BALL_BLUE);
-    _Ball_Init();
+    Ball_Setup();
 }
 
-void _Ball_Init(){
+void Ball_Setup(void){
     Rectangle srcRect = {0,0, BALL_WIDTH, BALL_HEIGHT};
     Rectangle dstRect = {CORE_SCREEN_WIDTH/2, CORE_SCREEN_HEIGHT/2, BALL_WIDTH, BALL_HEIGHT};
 
@@ -28,7 +32,7 @@ void _Ball_Init(){
     s_ball.radius = BALL_RADIUS;
 }
 
-void Ball_Update()
+void Ball_Update(void)
 {
     float deltaTime = GetFrameTime();
 
@@ -37,12 +41,12 @@ void Ball_Update()
 
     if (s_ball.dstRect.y > CORE_SCREEN_HEIGHT - s_textureBall.height || s_ball.dstRect.y < 0)
     {
-        _Ball_SwitchDirectionY();
+        Ball_SwitchDirectionY();
     }
 }
 
 
-void Ball_Draw(){
+void Ball_Draw(void){
     DrawTexturePro(s_textureBall, s_ball.srcRect, s_ball.dstRect, s_ball.origin,0, WHITE);
 
     if(g_debugMode)
@@ -51,23 +55,23 @@ void Ball_Draw(){
     }
 }
 
-void Ball_Reset(){
-    _Ball_Init();
+void Ball_Reset(void){
+    Ball_Setup();
 }
 
-void Ball_Destroy(){
+void Ball_Destroy(void){
     UnloadTexture(s_textureBall);
 }
 
-Ball* Ball_Get(){
+Ball* Ball_Get(void){
     return &s_ball;
 }
 
-void Ball_SwitchDirectionX(){
+void Ball_SwitchDirectionX(void){
     s_ball.direction.x *= -1;
     s_ball.speed.x = s_ball.speed.x + BALL_SPEED_INCREMENT;
 }
 
-void _Ball_SwitchDirectionY(){
+void Ball_SwitchDirectionY(){
     s_ball.direction.y *= -1;
 }

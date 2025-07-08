@@ -6,27 +6,40 @@ static Texture2D s_textureRightPaddle;
 static Paddle s_paddleLeft;
 static Paddle s_paddleRight;
 
-void Paddles_Init()
+
+void Paddles_Setup(void);
+void Paddle_Init(Paddle* paddle, 
+    Rectangle srcRect, 
+    Rectangle dstRect,
+    Vector2 origin,
+    int upKey, 
+    int downKey);
+void Paddle_Update(Paddle* paddle);
+void Paddle_Draw(Texture2D texture, Paddle* paddle);
+
+
+
+void Paddles_Init(void)
 {
     s_textureLeftPaddle = LoadTexture(TEXTURE_PADDLE_BLUE);
     s_textureRightPaddle = LoadTexture(TEXTURE_PADDLE_RED);
 
-    _Paddles_Init();
+    Paddles_Setup();
 }
 
-void _Paddles_Init(){
+void Paddles_Setup(void){
     Rectangle sourceRect = {0, 0, PADDLE_WIDTH, PADDLE_HEIGHT};
     Vector2 origin = {PADDLE_WIDTH/2, PADDLE_HEIGHT/2};
 
     float paddlePositionY = CORE_SCREEN_HEIGHT/2 - PADDLE_HEIGHT/2;
     Rectangle dstRectLeft = {50 - PADDLE_WIDTH, paddlePositionY, PADDLE_WIDTH, PADDLE_HEIGHT};
-    _Paddle_Init(&s_paddleLeft, sourceRect, dstRectLeft, origin, KEY_W, KEY_S);
+    Paddle_Init(&s_paddleLeft, sourceRect, dstRectLeft, origin, KEY_W, KEY_S);
 
     Rectangle dstRectRight = {CORE_SCREEN_WIDTH - 50, paddlePositionY, PADDLE_WIDTH, PADDLE_HEIGHT};
-    _Paddle_Init(&s_paddleRight, sourceRect, dstRectRight, origin, KEY_UP, KEY_DOWN);
+    Paddle_Init(&s_paddleRight, sourceRect, dstRectRight, origin, KEY_UP, KEY_DOWN);
 }
 
-void _Paddle_Init(Paddle* paddle, 
+void Paddle_Init(Paddle* paddle, 
     Rectangle srcRect, 
     Rectangle dstRect,
     Vector2 origin,
@@ -40,12 +53,12 @@ void _Paddle_Init(Paddle* paddle,
     paddle->dstRect = dstRect;
 }
 
-void Paddles_Update(){
-    _Paddle_Update(&s_paddleLeft);
-    _Paddle_Update(&s_paddleRight);
+void Paddles_Update(void){
+    Paddle_Update(&s_paddleLeft);
+    Paddle_Update(&s_paddleRight);
 }
 
-void _Paddle_Update(Paddle* paddle){
+void Paddle_Update(Paddle* paddle){
     float dt = GetFrameTime();
     if (IsKeyDown(paddle->upKey)) 
     {
@@ -62,9 +75,9 @@ void _Paddle_Update(Paddle* paddle){
     }
 }
 
-void Paddles_Draw(){
-    _Paddle_Draw(s_textureLeftPaddle, &s_paddleLeft);
-    _Paddle_Draw(s_textureRightPaddle, &s_paddleRight);
+void Paddles_Draw(void){
+    Paddle_Draw(s_textureLeftPaddle, &s_paddleLeft);
+    Paddle_Draw(s_textureRightPaddle, &s_paddleRight);
 
     if(g_debugMode)
     {
@@ -74,24 +87,24 @@ void Paddles_Draw(){
     }
 }
 
-void _Paddle_Draw(Texture2D texture, Paddle* paddle){
+void Paddle_Draw(Texture2D texture, Paddle* paddle){
     DrawTexturePro(texture, paddle->srcRect, paddle->dstRect, paddle->origin, 0, WHITE);
 }
 
-void Paddles_Reset(){
-    _Paddles_Init();
+void Paddles_Reset(void){
+    Paddles_Setup();
 }
 
 
-void Paddles_Destroy(){
+void Paddles_Destroy(void){
     UnloadTexture(s_textureLeftPaddle);
     UnloadTexture(s_textureRightPaddle);
 }
 
-Rectangle* Paddles_GetLeftRectangle(){
+Rectangle* Paddles_GetLeftRectangle(void){
     return &s_paddleLeft.dstRect;
 }
 
-Rectangle* Paddles_GetRightRectangle(){
+Rectangle* Paddles_GetRightRectangle(void){
     return &s_paddleRight.dstRect;
 }
